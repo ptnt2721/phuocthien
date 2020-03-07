@@ -1,30 +1,51 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+apply plugin: 'com.android.application'
+apply plugin: 'com.chaquo.python'
 
-buildscript {
-    
-    repositories {
-        google()
-        jcenter()
-        maven { url "https://chaquo.com/maven" }
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.2"
+
+    defaultConfig {
+        applicationId "ptnt.cusc.ctu.testpycharm"
+        minSdkVersion 19
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+
+        sourceSets {
+            main {
+                python {
+                    srcDirs = ["src/main/python"]
+                }
+            }
+        }
+        python {
+            buildPython "/usr/local/bin/python3"
+            buildPython "python3"
+        }
+        ndk {
+            abiFilters "armeabi-v7a", "x86"
+        }
+
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.1'
-        classpath 'com.chaquo.python:gradle:6.3.0'
 
-
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
     }
+
 }
 
-allprojects {
-    repositories {
-        google()
-        jcenter()
-        maven { url "https://chaquo.com/maven" }
-    }
-}
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }
